@@ -11,17 +11,19 @@ object TennisScoreCalculator {
   )
 
   def display(player1Score: Int, player2Score: Int): String = {
-    findWhoWon(player1Score, player2Score)
-      .map(_.name + " won!")
-      .getOrElse(
-        (player1Score, player2Score) match {
-          case (x, y) if x < 3 && y < 3 && x != y      => nominalCase(x, y)
-          case (x, y) if x < 3 && y < 3 && x == y      => equalCase(x)
-          case (x, y) if x == y && x > 2               => "deuce"
-          case (x, y) if x > 2 && Math.abs(x - y) == 1 => s"advantage ${advantageCase(x, y).name}"
-          case _                                       => "invalid score"
-        }
-    )
+    findWhoWon(player1Score, player2Score).fold(
+      computeScore(player1Score, player2Score)
+    )(_.name + " won!")
+  }
+
+  private def computeScore(player1Score: Int, player2Score: Int) = {
+    (player1Score, player2Score) match {
+      case (x, y) if x < 4 && y < 4 && x != y      => nominalCase(x, y)
+      case (x, y) if x < 3 && y < 3 && x == y      => equalCase(x)
+      case (x, y) if x == y && x > 2               => "deuce"
+      case (x, y) if x > 2 && Math.abs(x - y) == 1 => s"advantage ${advantageCase(x, y).name}"
+      case _                                       => "invalid score"
+    }
   }
 
   private def advantageCase(x: Int, y: Int): Player =

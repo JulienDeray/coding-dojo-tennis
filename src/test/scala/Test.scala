@@ -38,4 +38,12 @@ class Test extends WordSpec with Matchers {
   "display 'invalid score'" in {
     display(10, 5) shouldBe "invalid score"
   }
+
+  "display 'thirty forty'" in {
+    display(2, 3) shouldBe "thirty forty"
+  }
+
+  "compute high scores" in {
+    display(100, 101) shouldBe "advantage player 2"
+  }
 }
